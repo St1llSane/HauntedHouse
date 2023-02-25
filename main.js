@@ -53,7 +53,7 @@ const canvas = document.querySelector('.webgl')
 const scene = new THREE.Scene()
 
 // Fog
-const fog = new THREE.Fog('#2F3244', 1.5, 18)
+const fog = new THREE.Fog('#2B2E3E', 1, 16.5)
 scene.fog = fog
 
 // Grass
@@ -193,9 +193,16 @@ const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.12)
 moonLight.position.set(4, 5, -2)
 scene.add(moonLight)
 
-const doorLight = new THREE.PointLight('#FC9A1B', 1, 9)
+const doorLight = new THREE.PointLight('#FC9A1B', 1, 7)
 doorLight.position.set(0, 2, 4.3)
 house.add(doorLight)
+
+// Ghosts
+const ghost1 = new THREE.PointLight('#FFFF00', 2, 3.2)
+const ghost2 = new THREE.PointLight('#E700E3', 2, 3.2)
+const ghost3 = new THREE.PointLight('#69E700', 2, 3.2)
+
+scene.add(ghost1, ghost2, ghost3)
 
 // Sizes
 const sizes = {
@@ -218,7 +225,7 @@ scene.add(camera)
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas })
 renderer.setSize(sizes.width, sizes.height)
-renderer.setClearColor('#2F3244')
+renderer.setClearColor('#2B2E3E')
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.render(scene, camera)
@@ -250,6 +257,22 @@ gui.closed = true
 const clock = new THREE.Clock()
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
+
+  // UpdateGhosts
+  const ghost1Angle = elapsedTime / 2
+  ghost1.position.x = Math.cos(ghost1Angle) * 5
+  ghost1.position.z = Math.sin(ghost1Angle) * 5
+  ghost1.position.y = Math.sin(ghost1Angle * 3)
+
+  const ghost2Angle = -elapsedTime / 1.5
+  ghost2.position.x = Math.cos(ghost2Angle) * 8
+  ghost2.position.z = Math.sin(ghost2Angle) * 8
+  ghost2.position.y = Math.sin(ghost2Angle * 4) + Math.sin(elapsedTime * 2)
+
+  const ghost3Angle = -elapsedTime * 0.18
+  ghost3.position.x = Math.cos(ghost3Angle) * (7 * Math.sin(elapsedTime * 0.32))
+  ghost3.position.z = Math.sin(ghost3Angle) * (7* Math.sin(elapsedTime * 0.5))
+  ghost3.position.y = Math.sin(ghost3Angle * 4) + Math.sin(elapsedTime * 1.8)
 
   // Update controls
   controls.update()
