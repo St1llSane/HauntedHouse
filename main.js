@@ -9,6 +9,10 @@ const canvas = document.querySelector('.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+// Fog
+const fog = new THREE.Fog('#2F3244', 1.5, 18)
+scene.fog = fog
+
 // Mesh
 const plane = new THREE.Mesh(
   new THREE.PlaneGeometry(20, 20),
@@ -110,8 +114,8 @@ const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.12)
 moonLight.position.set(4, 5, -2)
 scene.add(moonLight)
 
-const doorLight = new THREE.PointLight('#F0AF4D', 1, 8)
-doorLight.position.set(0, 2.5, 4)
+const doorLight = new THREE.PointLight('#FCB72E', 1, 8)
+doorLight.position.set(0, 2.5, 4.8)
 house.add(doorLight)
 
 // Sizes
@@ -135,6 +139,7 @@ scene.add(camera)
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas })
 renderer.setSize(sizes.width, sizes.height)
+renderer.setClearColor('#2F3244')
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.render(scene, camera)
