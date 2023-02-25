@@ -24,8 +24,8 @@ scene.add(house)
 
 // Walls
 const walls = new THREE.Mesh(
-  new THREE.BoxGeometry(5, 3, 5),
-  new THREE.MeshStandardMaterial({ color: '#8B7164' })
+  new THREE.BoxGeometry(5, 3.2, 5),
+  new THREE.MeshStandardMaterial({ color: '#977568' })
 )
 const wallsHeight = walls.geometry.parameters.height
 const wallsDepth = walls.geometry.parameters.depth
@@ -103,9 +103,16 @@ for (let i = 0; i < 50; i++) {
 }
 
 // Light
-const ambientLight = new THREE.AmbientLight(0xffffff)
-ambientLight.intensity = 0.8
+const ambientLight = new THREE.AmbientLight('#B2D1FF', 0.12)
 scene.add(ambientLight)
+
+const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.12)
+moonLight.position.set(4, 5, -2)
+scene.add(moonLight)
+
+const doorLight = new THREE.PointLight('#F0AF4D', 1, 8)
+doorLight.position.set(0, 2.5, 4)
+house.add(doorLight)
 
 // Sizes
 const sizes = {
