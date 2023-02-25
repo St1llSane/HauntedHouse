@@ -191,7 +191,7 @@ for (let i = 0; i < 40; i++) {
 const ambientLight = new THREE.AmbientLight('#B2D1FF', 0.12)
 scene.add(ambientLight)
 
-const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.6)
+const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.16)
 moonLight.position.set(7, 4, -1.5)
 
 scene.add(moonLight)
