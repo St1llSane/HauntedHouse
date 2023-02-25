@@ -3,6 +3,17 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui'
 import './style.css'
 
+// Textures
+const textureLoader = new THREE.TextureLoader()
+
+const doorColorTexture = textureLoader.load('./textures/door/color.jpg')
+const doorAlphaTexture = textureLoader.load('./textures/door/alpha.jpg')
+const doorAOTexture = textureLoader.load('./textures/door/ambientOcclusion.jpg')
+const doorHeightTexture = textureLoader.load('./textures/door/height.jpg')
+const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg')
+const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg')
+const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg')
+
 // Canvas
 const canvas = document.querySelector('.webgl')
 
@@ -47,11 +58,25 @@ house.add(roof)
 
 // Door
 const door = new THREE.Mesh(
-  new THREE.PlaneGeometry(2, 2),
-  new THREE.MeshStandardMaterial({ color: '#aa7b7b' })
+  new THREE.PlaneGeometry(2.2, 2.2, 124, 124),
+  new THREE.MeshStandardMaterial({
+    map: doorColorTexture,
+		transparent: true,
+		alphaMap: doorAlphaTexture,
+    aoMap: doorAOTexture,
+		displacementMap: doorHeightTexture,
+		displacementScale: 0.11,
+		normalMap: doorNormalTexture,
+		metalnessMap: doorMetalnessTexture,
+		roughnessMap: doorRoughnessTexture
+  })
 )
-door.position.y = door.geometry.parameters.height / 2
-door.position.z = wallsDepth / 2 + 0.01
+door.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2)
+)
+door.position.y = door.geometry.parameters.height / 2 - 0.12
+door.position.z = wallsDepth / 2 - 0.025
 house.add(door)
 
 // Bushes
@@ -114,7 +139,7 @@ const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.12)
 moonLight.position.set(4, 5, -2)
 scene.add(moonLight)
 
-const doorLight = new THREE.PointLight('#FCB72E', 1, 8)
+const doorLight = new THREE.PointLight('#FCA32E', 1, 8)
 doorLight.position.set(0, 2.5, 4.8)
 house.add(doorLight)
 
