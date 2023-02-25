@@ -14,6 +14,38 @@ const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg')
 const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg')
 const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg')
 
+const bricksColorTextures = textureLoader.load('./textures/bricks/color.jpg')
+const bricksAOTextures = textureLoader.load(
+  './textures/bricks/ambientOcclusion.jpg'
+)
+const bricksNormalTextures = textureLoader.load('./textures/bricks/normal.jpg')
+const bricksRoughnessTextures = textureLoader.load(
+  './textures/bricks/roughness.jpg'
+)
+
+const grassColorTextures = textureLoader.load('./textures/grass/color.jpg')
+const grassAOTextures = textureLoader.load(
+  './textures/grass/ambientOcclusion.jpg'
+)
+const grassNormalTextures = textureLoader.load('./textures/grass/normal.jpg')
+const grassRoughnessTextures = textureLoader.load(
+  './textures/grass/roughness.jpg'
+)
+
+grassColorTextures.repeat.set(8, 8)
+grassAOTextures.repeat.set(8, 8)
+grassNormalTextures.repeat.set(8, 8)
+grassRoughnessTextures.repeat.set(8, 8)
+
+grassColorTextures.wrapS = THREE.RepeatWrapping
+grassAOTextures.wrapS = THREE.RepeatWrapping
+grassNormalTextures.wrapS = THREE.RepeatWrapping
+grassRoughnessTextures.wrapS = THREE.RepeatWrapping
+grassColorTextures.wrapT = THREE.RepeatWrapping
+grassAOTextures.wrapT = THREE.RepeatWrapping
+grassNormalTextures.wrapT = THREE.RepeatWrapping
+grassRoughnessTextures.wrapT = THREE.RepeatWrapping
+
 // Canvas
 const canvas = document.querySelector('.webgl')
 
@@ -24,10 +56,19 @@ const scene = new THREE.Scene()
 const fog = new THREE.Fog('#2F3244', 1.5, 18)
 scene.fog = fog
 
-// Mesh
+// Grass
 const plane = new THREE.Mesh(
   new THREE.PlaneGeometry(20, 20),
-  new THREE.MeshStandardMaterial({ color: '#86A064' })
+  new THREE.MeshStandardMaterial({
+    map: grassColorTextures,
+    aoMap: grassAOTextures,
+    normalMap: grassNormalTextures,
+    roughnessMap: grassRoughnessTextures,
+  })
+)
+plane.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(plane.geometry.attributes.uv.array, 2)
 )
 plane.rotation.set(-Math.PI / 2, 0, 0)
 plane.receiveShadow = true
@@ -40,7 +81,16 @@ scene.add(house)
 // Walls
 const walls = new THREE.Mesh(
   new THREE.BoxGeometry(5, 3.2, 5),
-  new THREE.MeshStandardMaterial({ color: '#977568' })
+  new THREE.MeshStandardMaterial({
+    map: bricksColorTextures,
+    aoMap: bricksAOTextures,
+    normalMap: bricksNormalTextures,
+    roughnessMap: bricksRoughnessTextures,
+  })
+)
+walls.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(walls.geometry.attributes.uv.array, 2)
 )
 const wallsHeight = walls.geometry.parameters.height
 const wallsDepth = walls.geometry.parameters.depth
@@ -61,14 +111,14 @@ const door = new THREE.Mesh(
   new THREE.PlaneGeometry(2.2, 2.2, 124, 124),
   new THREE.MeshStandardMaterial({
     map: doorColorTexture,
-		transparent: true,
-		alphaMap: doorAlphaTexture,
+    transparent: true,
+    alphaMap: doorAlphaTexture,
     aoMap: doorAOTexture,
-		displacementMap: doorHeightTexture,
-		displacementScale: 0.11,
-		normalMap: doorNormalTexture,
-		metalnessMap: doorMetalnessTexture,
-		roughnessMap: doorRoughnessTexture
+    displacementMap: doorHeightTexture,
+    displacementScale: 0.11,
+    normalMap: doorNormalTexture,
+    metalnessMap: doorMetalnessTexture,
+    roughnessMap: doorRoughnessTexture,
   })
 )
 door.geometry.setAttribute(
@@ -126,7 +176,11 @@ for (let i = 0; i < 50; i++) {
   const grave = new THREE.Mesh(gravesGeometry, gravesMatearials)
   const graveHeight = grave.geometry.parameters.height
   grave.position.set(x, graveHeight / 2 - 0.1, z)
-  grave.rotation.set(Math.random() * 0.4 - 0.2, 0, (Math.random() - 0.5) * 0.4)
+  grave.rotation.set(
+    Math.random() * 0.26 - 0.13,
+    0,
+    (Math.random() - 0.5) * 0.4
+  )
 
   graves.add(grave)
 }
@@ -139,8 +193,8 @@ const moonLight = new THREE.DirectionalLight('#B2D1FF', 0.12)
 moonLight.position.set(4, 5, -2)
 scene.add(moonLight)
 
-const doorLight = new THREE.PointLight('#FCA32E', 1, 8)
-doorLight.position.set(0, 2.5, 4.8)
+const doorLight = new THREE.PointLight('#FC9A1B', 1, 9)
+doorLight.position.set(0, 2, 4.3)
 house.add(doorLight)
 
 // Sizes
