@@ -81,6 +81,27 @@ leftBush.add(bush3, bush4, bush5)
 
 house.add(leftBush, rightBush)
 
+// Graves
+const graves = new THREE.Group()
+scene.add(graves)
+
+const gravesGeometry = new THREE.BoxGeometry(1.05, 1.2, 0.4)
+const gravesMatearials = new THREE.MeshStandardMaterial({ color: '#b2b6b1' })
+
+for (let i = 0; i < 50; i++) {
+  const angle = Math.random() * Math.PI * 2
+  const radius = 4.5 + Math.random() * 4.8
+  const x = Math.sin(angle) * radius
+  const z = Math.cos(angle) * radius
+
+  const grave = new THREE.Mesh(gravesGeometry, gravesMatearials)
+  const graveHeight = grave.geometry.parameters.height
+  grave.position.set(x, graveHeight / 2 - 0.1, z)
+  grave.rotation.set(Math.random() * 0.4 - 0.2, 0, (Math.random() - 0.5) * 0.4)
+
+  graves.add(grave)
+}
+
 // Light
 const ambientLight = new THREE.AmbientLight(0xffffff)
 ambientLight.intensity = 0.8
